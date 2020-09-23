@@ -25,34 +25,24 @@
 
 * signin(/user/signin)
     >Request : userID, password  
-    >Response : JWT
-
-* password modify(/user/password-modify)
-    >Request : JWT, password, newPassword  
     >Response : true/false
 
+* password modify(/user/password-modify)
+    >Request : session, password, newPassword  
+    >Response : true/false
+
+* logout(/user/logout)
+    >Request : session  
+    >Response : destroy session
 * withdraw(/user/withdraw)
-    >Request : JWT, password  
+    >Request : session, password  
     >Response : true/false
 
 ### Calender Manage
 
 * showCalender(/calender/show)
-    >Request : JWT  
-    >Response : json_calender_data
+    >Response : calender_data
 
-* setCalenderWithDay(/calender/set/day)
-    >Request : year, month, day, dayCycle  
-    >Response : true/false
-
-* setCalenderWithWeek(/calender/set/week)
-    >Request : year, month, day, weekCycle  
-    >Response : true/false
-
-* setCalenderWithMonth(/calender/set/month)
-    >Request : year, month, day, monthCycle  
-    >Response : true/false
-
-* setCalenderWithYear(/calender/set/year)
-    >Request : year, month, day, yearCycle  
+* setCalender(/calender/set)
+    >Request : session, year, month, day, cycleWith, cycleUnit  
     >Response : true/false

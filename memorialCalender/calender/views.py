@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+def show_calender(request):
+    pass
+
+def set_calender(request):
+    pass
