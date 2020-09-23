@@ -1,5 +1,5 @@
 """
-ASGI config for MemorialDay_Calendar project.
+ASGI config for memorialCalender project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MemorialDay_Calendar.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'memorialCalender.settings')
 
 application = get_asgi_application()
