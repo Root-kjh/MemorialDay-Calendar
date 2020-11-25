@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'material',
     'user.apps.UserConfig',
     'calender.apps.CalenderConfig'
 ]

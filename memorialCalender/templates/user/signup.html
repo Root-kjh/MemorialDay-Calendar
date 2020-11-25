@@ -1,0 +1,13 @@
+{% extends 'user/base.html' %}
+{% block title %}MemorialCalender signup{%endblock title %}
+{% block content_title %}Signup{% endblock content_title %}
+{%block content %}
+<form action="{% url 'signup' %}" method="POST">
+{% csrf_token %}
+<input type="text" name="user_id"/>
+<input type="password" name="user_password"/>
+<input type="password" name="user_password_retry"/>
+<input type="submit"/> 
+</form>
+<a href="{% url 'signin'%}"><button>signin</button></a>
+{% endblock content %}
