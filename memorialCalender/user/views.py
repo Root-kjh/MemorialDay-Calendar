@@ -1,3 +1,5 @@
+from .models import User
+from .forms import PasswordModifyForm, SigninForm, SignupForm, WithdrawForm
 from django.shortcuts import render, redirect
 
 def signup(request):
@@ -32,26 +34,36 @@ def withdraw(request):
 # view function
 
 def signup_get(request):
-    return render(request, 'user/signup.html')
+    signupForm = SignupForm()
+    return render(request, 'user/signup.html', {'form' : signupForm})
 
 def signup_post(request):
-
-    return redirect('user:signin', 'signin')
+    form = SignupForm(request.POST)
+    if form.is_valid():
+        form.save()
+    return redirect('signin', 'signin')
 
 def signin_get(request):
-    return render(request, 'user/signin.html')
+    signinForm = SigninForm()
+    return render(request, 'user/signin.html', {'form' : signinForm})
 
 def signin_post(request):
-    return redirect('calender:show')
+    form = SigninForm(request.POST)
+    if form.is_valid():
+        user_id = form.signin()
+        request.session['user_id'] = user_id
+    return redirect('/calender/show')
 
 def password_modify_get(request):
-    return render(request, 'user/password_modify.html')
+    passwordModifyForm = PasswordModifyForm()
+    return render(request, 'user/password_modify.html', {'form' : passwordModifyForm})
 
 def password_modify_post(request):
     return redirect('calender:show')
 
 def withdraw_get(request):
-    return render(request, 'user/withdraw.html')
+    withdrawForm = WithdrawForm()
+    return render(request, 'user/withdraw.html', {'form' : withdrawForm})
 
 def withdraw_post(reuqest):
-    return redirect('user:signin')
+    return redirect('signin')

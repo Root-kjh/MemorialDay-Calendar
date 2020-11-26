@@ -4,9 +4,7 @@
 {%block content %}
 <form action="{% url 'signup' %}" method="POST">
 {% csrf_token %}
-<input type="text" name="user_id"/>
-<input type="password" name="user_password"/>
-<input type="password" name="user_password_retry"/>
+{{form.as_p}}
 <input type="submit"/> 
 </form>
 <a href="{% url 'signin'%}"><button>signin</button></a>
