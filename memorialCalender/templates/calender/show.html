@@ -1,1 +1,90 @@
-test
+<html>
+</head>
+<title>Memorial-calender</title>
+</head>
+<body>
+<h1>hello! {{ user_id }}</h1>
+<button onclick="set_month('-')"><</button>
+<div id="year"></div>
+<div id="month"></div>
+<button onclick="set_month('+')">></button>
+<table id="calender">
+<thead>
+<tr>
+<th>일</th>
+<th>월</th>
+<th>화</th>
+<th>수</th>
+<th>목</th>
+<th>금</th>
+<th>토</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<script>
+    var year = new Date().getFullYear()
+    var month = new Date().getMonth()+1
+    const calender_element = document.getElementById("calender").getElementsByTagName("tbody")[0]
+    const calender = 
+    {% if calender %}
+    {% for c in calender %}
+        {
+            'start_day' : {{ c.start_day }},
+            'cycle_with' : {{ c.cycle_with }},
+            'cycle_unit' : {{c.cycle_unit}} 
+        }
+    {% endfor %}
+    {% else %}
+    null
+    {% endif %}
+    function set_calender(){
+        var lastDay = new Date(year, month, 0).getDate()
+        var start_day_week = new Date(year, month-1, 1).getDay()
+        while(calender_element.hasChildNodes())
+            calender_element.removeChild(calender_element.firstChild)
+        var count = 0
+        var day_count = 1
+        for(var i=0; i<lastDay+1; i++){
+            if(count===7)
+                count = 0
+            if(count===0){
+                var tr_element = document.createElement("tr")
+                calender_element.appendChild(tr_element)
+            }
+            var td_element = document.createElement("td")
+            if(start_day_week===0){
+                td_element.innerText = day_count
+                day_count+=1
+            }
+            else
+                start_day_week -= 1
+            tr_element.appendChild(td_element)
+            count++
+        }
+        document.getElementById("year").innerText=year+"년"
+        document.getElementById("month").innerText=month+"월"
+    }
+    function set_month(op){
+        if(op==="+"){
+            month+=1
+            if(month>12){
+                year+=1
+                month=1
+            }
+            set_calender()
+        }
+        else{
+            month-=1
+            if(month<1){
+                year-=1
+                month=12
+            }
+            set_calender()
+        }
+    }
+    set_calender()
+</script>
+</body>
+</html>

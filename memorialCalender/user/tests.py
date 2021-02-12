@@ -9,3 +9,8 @@ class UserViewTests(TestCase):
         test user signup test
         """
         
+    def test_signin(self):
+        """
+        test user signin test
+        """
+        

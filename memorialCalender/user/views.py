@@ -1,6 +1,7 @@
 from .models import User
 from .forms import PasswordModifyForm, SigninForm, SignupForm, WithdrawForm
 from django.shortcuts import render, redirect
+from django import forms
 
 def signup(request):
     if request.method == 'GET':
@@ -40,8 +41,11 @@ def signup_get(request):
 def signup_post(request):
     form = SignupForm(request.POST)
     if form.is_valid():
-        form.save()
-    return redirect('signin', 'signin')
+        try:
+            form.save()
+        except forms.ValidationError:
+            return render(request, 'error.html', {'errorReason' : "Exist User ID"})
+    return redirect('signin')
 
 def signin_get(request):
     signinForm = SigninForm()

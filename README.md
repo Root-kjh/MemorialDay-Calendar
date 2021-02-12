@@ -44,5 +44,5 @@
     >Response : calender_data
 
 * setCalender(/calender/set)
-    >Request : session, year, month, day, cycleWith, cycleUnit  
+    >Request : session, title, year, month, day, cycleWith, cycleUnit  
     >Response : true/false
