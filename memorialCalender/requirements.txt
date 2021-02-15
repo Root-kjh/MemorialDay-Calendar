@@ -28,3 +28,4 @@ toml==0.10.2
 uritemplate==3.0.1
 urllib3==1.26.3
 wrapt==1.12.1
+djangorestframework-jwt==1.11.0

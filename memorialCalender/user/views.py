@@ -1,46 +1,42 @@
-from .models import User
-from django.http import HttpResponse, JsonResponse
-from rest_framework.parsers import JSONParser
-from user.serializers import UserSerializer
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.authtoken.models import Token
-import hashlib
 from rest_framework.response import Response
+from rest_framework import status
+from .serializers import SigninSerializer, SignupUserSerializer
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework import generics
 
-HASH_SALT = "KJH_MEMORIAL"
-
-def HASH_PASSWORD(password):
-    hashed_password = hashlib.sha512(str(password+HASH_SALT).encode('utf-8')).hexdigest()
-    return hashed_password
-
-@csrf_exempt
-def signup(request):
-    if request.method == 'POST':
-        try:
-            data = JSONParser().parse(request)
-            data['user_password'] = HASH_PASSWORD(data['user_password'])
-            serializer = UserSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return HttpResponse("True")
-            return JsonResponse(serializer.errors, status=400)
-        except:
-            return JsonResponse({'Error' : "RequestDataInvalid"})
+@permission_classes([AllowAny])
+class Signup(generics.GenericAPIView):
+    serializer_class = SignupUserSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid(raise_exception=True):
+            return Response({"message" : "Request Body Error."}, status=status.HTTP_409_CONFLICT)
+        
+        serializer.is_valid(raise_exception=True)
+        serializer.create(serializer.validated_data)
+        return Response({"message" : "True"}, status=status.HTTP_201_CREATED)
             
 
-@csrf_exempt
-def signin(request):
-    if request.method == 'POST':
-        try:
-            data = JSONParser().parse(request)
-            data['user_password'] = HASH_PASSWORD(data['user_password'])
-            serializer = UserSerializer(data=data)
-            user = serializer.validated_data
-            if serializer.is_valid():
-                user = User.objects.filter(user_id=serializer.validated_data['user_id']).first()
-                if user and user.user_password == data['user_password']:
-                    token, created = Token.objects.get_or_create(user=user)
-                    return JsonResponse({'token' : token.key})
-            return JsonResponse(serializer.errors, status=400)
-        except:
-            return JsonResponse({'Error' : "RequestDataInvalid"})
+@permission_classes([AllowAny])
+class Signin(generics.GenericAPIView):
+    serializer_class = SigninSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid(raise_exception=True):
+            return Response({"message" : "Request Body Error."}, status=status.HTTP_409_CONFLICT)
+        
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        if user['username'] == "None":
+            return Response({"message" : "fail"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        return Response({"token" : user['token']})
+
+@permission_classes([IsAuthenticated])
+class PasswordModify(generics.GenericAPIView):
+    pass
+
+@permission_classes([IsAuthenticated])
+class Withdraw(generics.GenericAPIView):
+    pass

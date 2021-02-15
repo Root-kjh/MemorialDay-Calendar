@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework import permissions
-from .serializers import UserSerializer
-
+from .serializers import CalenderSerializer, UserSerializer
+from calender.models import Calender
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -10,4 +10,10 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAdminUser]
+
+
+class CalenderViewSet(viewsets.ModelViewSet):
+    queryset = Calender.objects.all()
+    serializer_class = CalenderSerializer
+    permission_classes = [permissions.IsAdminUser]
