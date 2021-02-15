@@ -5,6 +5,7 @@ from rest_framework import serializers
 class CalenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calender
+        fields = '__all__'
         read_only_fields = ['id', 'user_id']
     
     def update(self, instance, validated_data):
