@@ -7,9 +7,10 @@ class CalenderSerializer(serializers.ModelSerializer):
         model = Calender
         fields = '__all__'
         read_only_fields = ['id', 'user_id']
-    
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
         instance.start_day = validated_data.get('start_day', instance.start_day)
         instance.cycle_with = validated_data.get('cycle_with', instance.cycle_with)
         instance.cycle_unit = validated_data.get('cycle_unit', instance.cycle_unit)
+        instance.save()
+        return instance

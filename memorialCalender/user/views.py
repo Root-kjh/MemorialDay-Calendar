@@ -1,13 +1,15 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import SigninSerializer, SignupUserSerializer
+from rest_framework.views import APIView
+from .serializers import SigninSerializer, UserSerializer, WithdrawSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework import generics
+from django.contrib.auth.models import User
 
 @permission_classes([AllowAny])
 class Signup(generics.GenericAPIView):
-    serializer_class = SignupUserSerializer
+    serializer_class = UserSerializer
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid(raise_exception=True):
@@ -34,9 +36,18 @@ class Signin(generics.GenericAPIView):
         return Response({"token" : user['token']})
 
 @permission_classes([IsAuthenticated])
-class PasswordModify(generics.GenericAPIView):
-    pass
+class PasswordModify(APIView):
+    def post(self, request):
+        user = User.objects.filter(id=request.user.id).first()
+        if len(request.data['password'])>128:
+            return Response({"message" : "Request Body Error."}, status=status.HTTP_409_CONFLICT)
+        response = UserSerializer.modify_password(self, user, request.data['password'])
+        return Response(response)
 
 @permission_classes([IsAuthenticated])
-class Withdraw(generics.GenericAPIView):
-    pass
+class Withdraw(APIView):
+    def post(self, request):
+        withdraw_user = WithdrawSerializer(data={'username' : request.user.username, 'password' : request.data['password']})
+        withdraw_user.is_valid(raise_exception=True)
+        response = WithdrawSerializer.delete(self, withdraw_user.validated_data)
+        return Response(response)

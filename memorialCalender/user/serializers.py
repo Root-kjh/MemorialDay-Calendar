@@ -12,10 +12,11 @@ JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 # 기본 유저 모델 불러오기
 User = get_user_model()
 
-class SignupUserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = '__all__'
+        read_only_fields = ['id']
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -23,10 +24,30 @@ class SignupUserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+    def modify_password(self, instance, new_password):
+        instance.set_password(new_password)
+        instance.save()
+        return {'message' : 'True'}
+
+
+class WithdrawSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=30)
+    password = serializers.CharField(max_length=128, write_only=True)
+    
+    def delete(self, data):
+        username = data.get("username")
+        password = data.get("password")
+        user =  authenticate(username=username, password=password)
+
+        if user is None:
+            return {'message': 'Password Not Matched'}
+
+        User.objects.filter(username=username).delete()
+        return {'message' : 'True'}
+
 class SigninSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=30)
     password = serializers.CharField(max_length=128, write_only=True)
-    token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
         username = data.get("username")
@@ -47,10 +68,3 @@ class SigninSerializer(serializers.Serializer):
             'username' : user.username,
             'token' : jwt_token
         }
-
-class PasswordModifySerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=30, read_only=True)
-    new_password = serializers.CharField(max_length=128, write_only=True)
-
-    def validate(self, data):
-        token = data.get("token")
