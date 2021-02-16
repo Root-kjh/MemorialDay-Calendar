@@ -28,7 +28,7 @@
     >Response : jwt
 
 * password modify(/user/password-modify)
-    >Request : jwt, password, newPassword  
+    >Request : jwt, newPassword  
     >Response : new jwt
 
 * withdraw(/user/withdraw)
@@ -45,10 +45,10 @@
     >Request : jwt, title, year, month, day, cycleWith, cycleUnit  
     >Response : true/false
 
-* updateCalender(/calender/update)
+* updateCalender(/calender/update/<calenderID>/)
     >Request : jwt, idx, title, year, month, day, cycleWith, cycleUnit
     >Response : true/false
 
-* delCalender(/calender/del)
+* delCalender(/calender/del/<calenderID>/)
     >Request : jwt, idx
     >Response : true/false
