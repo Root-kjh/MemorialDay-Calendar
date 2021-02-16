@@ -45,10 +45,10 @@
     >Request : jwt, title, year, month, day, cycleWith, cycleUnit  
     >Response : true/false
 
-* updateCalender(/calender/update/<calenderID>/)
+* updateCalender(/calender/update/&#60;calenderID&#62;/)
     >Request : jwt, idx, title, year, month, day, cycleWith, cycleUnit
     >Response : true/false
 
-* delCalender(/calender/del/<calenderID>/)
+* delCalender(/calender/del/&#60;calenderID&#62;/)
     >Request : jwt, idx
     >Response : true/false
