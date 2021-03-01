@@ -24,7 +24,7 @@ class SetCalender(generics.GenericAPIView):
 
 @permission_classes([IsAuthenticated])
 class ShowCalender(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         user = request.user
         if Calender.objects.filter(user=user).count() > 0:
             serializer = CalenderSerializer(Calender.objects.filter(user=user.id), many=True) 

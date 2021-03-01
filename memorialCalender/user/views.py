@@ -10,11 +10,8 @@ from django.contrib.auth.models import User
 @permission_classes([AllowAny])
 class Signup(generics.GenericAPIView):
     serializer_class = UserSerializer
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid(raise_exception=True):
-            return Response({"message" : "Request Body Error."}, status=status.HTTP_409_CONFLICT)
-        
         serializer.is_valid(raise_exception=True)
         serializer.create(serializer.validated_data)
         return Response({"message" : "True"}, status=status.HTTP_201_CREATED)
@@ -23,12 +20,10 @@ class Signup(generics.GenericAPIView):
 @permission_classes([AllowAny])
 class Signin(generics.GenericAPIView):
     serializer_class = SigninSerializer
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid(raise_exception=True):
-            return Response({"message" : "Request Body Error."}, status=status.HTTP_409_CONFLICT)
-        
         serializer.is_valid(raise_exception=True)
+        
         user = serializer.validated_data
         if user['username'] == "None":
             return Response({"message" : "fail"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -37,16 +32,16 @@ class Signin(generics.GenericAPIView):
 
 @permission_classes([IsAuthenticated])
 class PasswordModify(APIView):
-    def post(self, request):
+    def put(self, request):
         user = User.objects.filter(id=request.user.id).first()
         if len(request.data['password'])>128:
-            return Response({"message" : "Request Body Error."}, status=status.HTTP_409_CONFLICT)
+            return Response({"message" : "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
         response = UserSerializer.modify_password(self, user, request.data['password'])
         return Response(response)
 
 @permission_classes([IsAuthenticated])
 class Withdraw(APIView):
-    def post(self, request):
+    def delete(self, request):
         withdraw_user = WithdrawSerializer(data={'username' : request.user.username, 'password' : request.data['password']})
         withdraw_user.is_valid(raise_exception=True)
         response = WithdrawSerializer.delete(self, withdraw_user.validated_data)
