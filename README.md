@@ -20,35 +20,49 @@
 ### User Manage
 
 * signup(/user/signup)
-    >Request : userID, password  
-    >Response : true/false 
+    * Request(POST)
+        * Json : username, password  
+    * Response : true/false 
 
 * signin(/user/signin)
-    >Request : userID, password  
-    >Response : jwt
+    * Request(POST)
+        * Json : username, password  
+    * Response : jwt
 
 * password modify(/user/password-modify)
-    >Request : jwt, newPassword  
-    >Response : new jwt
+    * Request(PUT)
+        * Auth : jwt
+        * Json : newPassword  
+    * Response : new jwt
 
 * withdraw(/user/withdraw)
-    >Request : jwt, password  
-    >Response : true/false
+    * Request(DEL)
+        * Auth: jwt
+        * Json : password  
+    * Response : true/false
 
 ### Calender Manage
 
 * showCalender(/calender/show)
-    >Request : jwt
-    >Response : calender_data
+    * Request(GET)
+        * Auth: jwt
+    * Response : calender_data
 
 * setCalender(/calender/set)
-    >Request : jwt, title, year, month, day, cycleWith, cycleUnit  
-    >Response : true/false
+    * Request(POST)
+        * Auth: jwt
+        * Json: title, year, month, day, cycleWith, cycleUnit  
+    * Response : true/false
 
 * updateCalender(/calender/update/&#60;calenderID&#62;/)
-    >Request : jwt, idx, title, year, month, day, cycleWith, cycleUnit
-    >Response : true/false
+    * Request
+        * Auth: jwt
+        * PathParameter: calenderID 
+        * Json: title, year, month, day, cycleWith, cycleUnit
+    * Response : true/false
 
 * delCalender(/calender/del/&#60;calenderID&#62;/)
-    >Request : jwt, idx
-    >Response : true/false
+    * Request(DEL)
+        * Auth: jwt
+        * PathParameter: calnederID
+    * Response : true/false
