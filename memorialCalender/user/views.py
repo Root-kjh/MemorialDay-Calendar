@@ -31,7 +31,7 @@ class Signin(generics.GenericAPIView):
         return Response({"token" : user['token']})
 
 @permission_classes([IsAuthenticated])
-class PasswordModify(APIView):
+class UserView(APIView):
     def put(self, request):
         user = User.objects.filter(id=request.user.id).first()
         if len(request.data['password'])>128:
@@ -40,8 +40,8 @@ class PasswordModify(APIView):
         return Response(response)
 
 @permission_classes([IsAuthenticated])
-class Withdraw(APIView):
-    def delete(self, request):
+class UserView(APIView):
+    def post(self, request):
         withdraw_user = WithdrawSerializer(data={'username' : request.user.username, 'password' : request.data['password']})
         withdraw_user.is_valid(raise_exception=True)
         response = WithdrawSerializer.delete(self, withdraw_user.validated_data)

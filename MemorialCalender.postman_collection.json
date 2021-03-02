@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"John\", // Required\r\n    \"password\": \"complex_password\" // Required\r\n}",
+							"raw": "{\r\n    \"username\": \"John\",\r\n    \"password\": \"complex_password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,13 +24,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/user/signup",
+							"raw": "{{SCHEME}}://{{SERVER}}/auth/signup",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
-								"user",
+								"auth",
 								"signup"
 							]
 						}
@@ -44,7 +44,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"John\", // Required\r\n    \"password\": \"complex_password\" // Required\r\n}",
+							"raw": "{\r\n    \"username\": \"John\",\r\n    \"password\": \"complex_password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -52,13 +52,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/user/signin",
+							"raw": "{{SCHEME}}://{{SERVER}}/auth/signin",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
-								"user",
+								"auth",
 								"signin"
 							]
 						}
@@ -78,7 +78,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTQwNjM4MzEsInN1YiI6MX0.G35SA2YJhUoJsuWqCXcH2hNePgOIbAKwerztEvW002Y",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6IkpvaG4iLCJleHAiOjE2MTcxODUzMDAsImVtYWlsIjoiIn0.ZUIf4zyJh1Fag_5wDjcYWC-Ij2bliLDGoUERijyE-ns",
 									"type": "string"
 								}
 							]
@@ -86,14 +86,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/calender/show",
+							"raw": "{{SCHEME}}://{{SERVER}}/calender",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
-								"calender",
-								"show"
+								"calender"
 							]
 						}
 					},
@@ -124,14 +123,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/calender/set",
+							"raw": "{{SCHEME}}://{{SERVER}}/calender",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
-								"calender",
-								"set"
+								"calender"
 							]
 						}
 					},
@@ -162,14 +160,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/calender/set/:calenderID",
+							"raw": "{{SCHEME}}://{{SERVER}}/calender/:calenderID",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
 								"calender",
-								"set",
 								":calenderID"
 							],
 							"variable": [
@@ -207,14 +204,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/calender/set/:calenderID",
+							"raw": "{{SCHEME}}://{{SERVER}}/calender/:calenderID",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
 								"calender",
-								"set",
 								":calenderID"
 							],
 							"variable": [
@@ -257,14 +253,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/user/password-modify",
+							"raw": "{{SCHEME}}://{{SERVER}}/user/password",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
 								"user",
-								"password-modify"
+								"password"
 							]
 						}
 					},
@@ -285,24 +281,14 @@
 						},
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"complex_password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{SCHEME}}://{{SERVER}}/user/withdraw",
+							"raw": "{{SCHEME}}://{{SERVER}}/user",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{SERVER}}"
 							],
 							"path": [
-								"user",
-								"withdraw"
+								"user"
 							]
 						}
 					},

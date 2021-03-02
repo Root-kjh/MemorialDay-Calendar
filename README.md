@@ -17,52 +17,65 @@
 
 ## API Docs
 
-### User Manage
+### Auth
 
-* signup(/user/signup)
+* options
+    * Request(Options)
+    * Response(Allow: POST)
+
+* signup(/auth/signup)
     * Request(POST)
         * Json : username, password  
     * Response : true/false 
 
-* signin(/user/signin)
+* signin(/auth/signin)
     * Request(POST)
         * Json : username, password  
     * Response : jwt
 
-* password modify(/user/password-modify)
-    * Request(PUT)
+### User
+
+* options
+    * Request(Options)
+    * Response(Allow: PATCH, DELETE)
+
+* password modify(/user/password)
+    * Request(PATCH)
         * Auth : jwt
         * Json : newPassword  
     * Response : new jwt
 
-* withdraw(/user/withdraw)
+* withdraw(/user/)
     * Request(DEL)
         * Auth: jwt
-        * Json : password  
     * Response : true/false
 
-### Calender Manage
+### Calender
 
-* showCalender(/calender/show)
+* options
+    * Request(Options)
+    * Response(Allow: GET, POST, PUT, DELETE)
+
+* showCalender(/calender)
     * Request(GET)
         * Auth: jwt
     * Response : calender_data
 
-* setCalender(/calender/set)
+* setCalender(/calender)
     * Request(POST)
         * Auth: jwt
         * Json: title, year, month, day, cycleWith, cycleUnit  
     * Response : true/false
 
-* updateCalender(/calender/update/&#60;calenderID&#62;/)
-    * Request
+* updateCalender(/calender/&#60;calenderID&#62;)
+    * Request(PUT)
         * Auth: jwt
         * PathParameter: calenderID 
         * Json: title, year, month, day, cycleWith, cycleUnit
     * Response : true/false
 
-* delCalender(/calender/del/&#60;calenderID&#62;/)
-    * Request(DEL)
+* delCalender(/calender/&#60;calenderID&#62;)
+    * Request(DELETE)
         * Auth: jwt
         * PathParameter: calnederID
     * Response : true/false
