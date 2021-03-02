@@ -1,15 +1,9 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import get_user_model
 
-# JWT 사용을 위한 설정 
-JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER 
-JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER 
-
-# 기본 유저 모델 불러오기
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,25 +12,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
-    def create(self, validated_data):
-        user = super().create(validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
-
-    def modify_password(self, instance, new_password):
-        instance.set_password(new_password)
-        instance.save()
+    def modify_password(self, new_password):
+        self.password = new_password
+        self.is_valid(raise_exception=True)
+        self.
+        self.save()
         return {'message' : 'True'}
 
-
-class WithdrawSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=30)
-    password = serializers.CharField(max_length=128, write_only=True)
-    
-    def delete(self, data):
-        username = data.get("username")
-        password = data.get("password")
+    def delete(self):
+        username = self.get("username")
+        password = self.get("password")
         user =  authenticate(username=username, password=password)
 
         if user is None:
@@ -44,27 +29,3 @@ class WithdrawSerializer(serializers.Serializer):
 
         User.objects.filter(username=username).delete()
         return {'message' : 'True'}
-
-class SigninSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=30)
-    password = serializers.CharField(max_length=128, write_only=True)
-
-    def validate(self, data):
-        username = data.get("username")
-        password = data.get("password", None)
-        user =  authenticate(username=username, password=password)
-
-        if user is None:
-            return {'username': 'None'}
-        try:
-            payload = JWT_PAYLOAD_HANDLER(user)
-            jwt_token = JWT_ENCODE_HANDLER(payload)
-            update_last_login(None, user)
-        except User.DoesNotExist:
-            raise serializers.ValidationError(
-            'User with given username and password does not exist'
-        )
-        return {
-            'username' : user.username,
-            'token' : jwt_token
-        }
