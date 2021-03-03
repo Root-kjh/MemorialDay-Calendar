@@ -11,11 +11,9 @@ from .models import Calender
 class CalenderView(generics.GenericAPIView):
     serializer_class = CalenderSerializer
     def post(self, request):
-        user = request.user
-        request.data['user'] = user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.create(serializer.validated_data, request.user.id)
         return Response({"message" : "True"}, status=status.HTTP_201_CREATED)
 
     def get(self, request):

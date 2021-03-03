@@ -5,8 +5,14 @@ from rest_framework import serializers
 class CalenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calender
-        fields = '__all__'
-        read_only_fields = ['id', 'user_id']
+        fields = ('title', 'start_day', 'cycle_with', 'cycle_unit')
+
+    def create(self, validated_data, user_id):
+        calender = super().create(validated_data)
+        calender.set_user_id = user_id
+        calender.save()
+        return calender
+
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
         instance.start_day = validated_data.get('start_day', instance.start_day)
