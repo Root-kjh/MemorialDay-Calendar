@@ -15,7 +15,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'username', 'password']
         read_only_fields = ['id']
 
     def create(self, validated_data):
@@ -44,6 +44,7 @@ class AuthSerializer(serializers.Serializer):
             'User with given username and password does not exist'
         )
         return {
+            'id' : user.id,
             'username' : user.username,
             'token' : jwt_token
         }

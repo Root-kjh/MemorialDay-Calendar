@@ -1,7 +1,11 @@
 from django.urls import path, include
-
-urlpatterns = [
-    path('auth/', include('auth.urls')),
-    path('user', include('user.urls')),
-    path('calender', include('calender.urls'))
-]
+from rest_framework.routers import DefaultRouter
+from calender.views import CalenderViewSet
+from user.views import UserViewSet
+from auth.views import SigninViewSet, SignupViewSet
+router = DefaultRouter()
+router.register(r'calender', CalenderViewSet)
+router.register(r'user', UserViewSet)
+router.register(r'auth/signup', SignupViewSet, 'Auth')
+router.register(r'auth/signin', SigninViewSet, 'Auth')
+urlpatterns = router.urls

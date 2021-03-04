@@ -1,52 +1,43 @@
 from rest_framework.response import Response
-from rest_framework import serializers, status, viewsets
-from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework import viewsets
 from .serializers import CalenderSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
-from rest_framework import generics
 from .models import Calender
-import logging
 
-@permission_classes([IsAuthenticated])
-class CalenderView(generics.GenericAPIView):
+class CalenderViewSet(viewsets.GenericViewSet):
+    queryset = Calender.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = CalenderSerializer
-    def post(self, request):
+
+    def create(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         calender = serializer.create(serializer.validated_data, request.user.id)
         calender.save()
         return Response({"message" : "True"}, status=status.HTTP_201_CREATED)
 
-    def get(self, request):
-        logger = logging.getLogger(__name__)
-        logger.warning("test")
+    def list(self, request):
         user = request.user
         serializer = CalenderSerializer(Calender.objects.filter(user=user.id), many=True) 
         return Response(serializer.data)
 
-    def delete(self, requesst, id):
-        user = requesst.user
-        logger = logging.getLogger(__name__)
-        logger.warning("test")
-        logger.warning(id)
-        if not Calender.objects.filter(id = id).exists():
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        calender = Calender.objects.filter(id=id).first()
-        if calender.user.id != user.id:
-            return Response({"Message" : "Permission Denied"}, status=status.HTTP_403_FORBIDDEN)
-        calender.delete()
-        return Response({"Message" : "True"})
-
-    def put(self, request, id):
+    def update(self, request, pk=None):
         user = request.user
-        if not Calender.objects.filter(id = id).exists():
-            return Response({"Message" : "Not Exists Calender"}, status=status.HTTP_404_NOT_FOUND)
-        calender = Calender.objects.filter(id=id).first()
-        if calender.user.id != user.id:
+        calender = self.get_object()
+        if calender.user_id == request.user.id:
+            new_calender_data = CalenderSerializer(data=request.data)
+            new_calender_data.is_valid(raise_exception=True)
+            CalenderSerializer.update(self, calender, validated_data=new_calender_data.validated_data)
+            return Response({"message" : "True"})
+        else:
             return Response({"Message" : "Permission Denied"}, status=status.HTTP_403_FORBIDDEN)
-        request.data['user'] = user.id
-        new_calender_data = CalenderSerializer(data=request.data)
-        new_calender_data.is_valid(raise_exception=True)
-        CalenderSerializer.update(self, calender, validated_data=new_calender_data.validated_data)
-        return Response({"message" : "True"})
+
+    def destroy(self, request, pk=None):
+        calender = self.get_object()
+        if calender.user_id == request.user.id:
+            calender.delete()
+            return Response({"Message" : "True"})
+        else:
+            return Response({"Message" : "Permission Denied"}, status=status.HTTP_403_FORBIDDEN)
