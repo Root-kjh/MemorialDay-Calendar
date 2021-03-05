@@ -1,9 +1,8 @@
 from rest_framework.response import Response
-from rest_framework import status
 from .serializers import AuthSerializer, UserSerializer
 from rest_framework.permissions import AllowAny
-from rest_framework.decorators import permission_classes
 from rest_framework import viewsets
+from lib.response_form import CREATED_RESPONSE, FAILED_RESPONSE
 
 class SignupViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
@@ -12,7 +11,7 @@ class SignupViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.create(serializer.validated_data)
-        return Response({"message" : "True"}, status=status.HTTP_201_CREATED)
+        return CREATED_RESPONSE
             
 class SigninViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
@@ -22,5 +21,5 @@ class SigninViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         if user['username'] == "None":
-            return Response({"message" : "fail"}, status=status.HTTP_401_UNAUTHORIZED)
+            return FAILED_RESPONSE
         return Response(user)

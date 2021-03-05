@@ -19,63 +19,53 @@
 
 ### Auth
 
-* options
-    * Request(Options)
-    * Response(Allow: POST)
-
-* signup(/auth/signup)
+* signup(/auth/signup/)
     * Request(POST)
         * Json : username, password  
     * Response : true/false 
 
-* signin(/auth/signin)
+* signin(/auth/signin/)
     * Request(POST)
         * Json : username, password  
-    * Response : jwt
+    * Response : userinfo(pk, username, jwt)
 
 ### User
 
-* options
-    * Request(Options)
-    * Response(Allow: PATCH, DELETE)
-
-* password modify(/user/password)
+* password modify(/user/&#60;pk&#62;/)
     * Request(PATCH)
         * Auth : jwt
-        * Json : newPassword  
-    * Response : new jwt
+        * PathParameter: pk
+        * Json : Password  
+    * Response : true/false
 
-* withdraw(/user/)
-    * Request(DEL)
+* withdraw(/user/&#60;pk&#62;/)
+    * Request(DELETE)
         * Auth: jwt
+        * PathParameter: pk
     * Response : true/false
 
 ### Calender
 
-* options
-    * Request(Options)
-    * Response(Allow: GET, POST, PUT, DELETE)
-
-* showCalender(/calender)
+* showCalender(/calender/)
     * Request(GET)
         * Auth: jwt
-    * Response : calender_data
+    * Response : calender_data(pk, title, start_day(yyyy-mm-dd), cycle_with, cycle_unit)
 
-* setCalender(/calender)
+* setCalender(/calender/)
     * Request(POST)
         * Auth: jwt
-        * Json: title, year, month, day, cycleWith, cycleUnit  
+        * Json: title, start_day(yyyy-mm-dd), cycleWith, cycleUnit  
     * Response : true/false
 
-* updateCalender(/calender/&#60;calenderID&#62;)
+* updateCalender(/calender/&#60;pk&#62;/)
     * Request(PUT)
         * Auth: jwt
-        * PathParameter: calenderID 
-        * Json: title, year, month, day, cycleWith, cycleUnit
+        * PathParameter: pk 
+        * Json: title, start_day(yyyy-mm-dd), cycleWith, cycleUnit
     * Response : true/false
 
-* delCalender(/calender/&#60;calenderID&#62;)
+* delCalender(/calender/&#60;pk&#62;/)
     * Request(DELETE)
         * Auth: jwt
-        * PathParameter: calnederID
+        * PathParameter: pk
     * Response : true/false

@@ -1,10 +1,8 @@
-from rest_framework.response import Response
 from .serializers import PasswordModifySerializer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
-from rest_framework import status
 from rest_framework import viewsets
-from rest_framework.decorators import action
+from lib.response_form import SUCCESS_RESPONSE, PERMISSION_DENIED_RESPONSE
 
 class UserViewSet(viewsets.GenericViewSet):
     queryset = User.objects.all()
@@ -18,14 +16,14 @@ class UserViewSet(viewsets.GenericViewSet):
             user = self.request.user
             user.set_password(serializer.data.get("password"))
             user.save()
-            return Response({"message" : "True"})
+            return SUCCESS_RESPONSE
         else:
-            return Response({"Message" : "Permission Denied"}, status = status.HTTP_403_FORBIDDEN)
+            return PERMISSION_DENIED_RESPONSE
 
     def destroy(self, request, pk=None):
         user = self.get_object()
         if user.id == request.user.id:
             user.delete()
-            return Response({"message" : "True"})
+            return SUCCESS_RESPONSE
         else:
-            return Response({"Message" : "Permission Denied"}, status = status.HTTP_403_FORBIDDEN)
+            return PERMISSION_DENIED_RESPONSE
