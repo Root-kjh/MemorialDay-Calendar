@@ -2,7 +2,28 @@ from django.db.models import fields
 from .models import Calender
 from rest_framework import serializers
 
+class CycleWithField(serializers.Field):
+    
+    CYCLE_WITH_TO_INTERNAL_DICT={
+        "day": 0,
+        "week": 1,
+        "month": 2,
+        "year": 3
+    }
+
+    CYCLE_WITH_TO_EXTERNAL_LIST = ["day", "week", "month", "year"]
+
+    def to_internal_value(self, value):
+        value = self.CYCLE_WITH_TO_INTERNAL_DICT[value]
+        if type(value) is str:
+            raise serializers.ValidationError("cycle_with is in (day, week, month, year)")
+        return value
+
+    def to_representation(self, data):
+        return self.CYCLE_WITH_TO_EXTERNAL_LIST[data]
+
 class CalenderSerializer(serializers.ModelSerializer):
+    cycle_with = CycleWithField()
     class Meta:
         model = Calender
         fields = ('id', 'title', 'start_day', 'cycle_with', 'cycle_unit')
@@ -17,11 +38,3 @@ class CalenderSerializer(serializers.ModelSerializer):
         }
         calender = super().create(calneder_data)
         return calender
-
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get('title', instance.title)
-        instance.start_day = validated_data.get('start_day', instance.start_day)
-        instance.cycle_with = validated_data.get('cycle_with', instance.cycle_with)
-        instance.cycle_unit = validated_data.get('cycle_unit', instance.cycle_unit)
-        instance.save()
-        return instance

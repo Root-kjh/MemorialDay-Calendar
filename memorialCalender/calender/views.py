@@ -19,16 +19,16 @@ class CalenderViewSet(viewsets.GenericViewSet):
 
     def list(self, request):
         user = request.user
-        serializer = CalenderSerializer(Calender.objects.filter(user=user.id), many=True) 
+        serializer = self.get_serializer(Calender.objects.filter(user=user.id), many=True) 
         return Response(serializer.data)
 
     def update(self, request, pk=None):
         user = request.user
         calender = self.get_object()
         if calender.user_id == request.user.id:
-            new_calender_data = CalenderSerializer(data=request.data)
-            new_calender_data.is_valid(raise_exception=True)
-            CalenderSerializer.update(self, calender, validated_data=new_calender_data.validated_data)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.update(instance=calender, validated_data=serializer.validated_data)
             return SUCCESS_RESPONSE
         else:
             return PERMISSION_DENIED_RESPONSE
