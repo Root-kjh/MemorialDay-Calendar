@@ -22,7 +22,7 @@
 * signup(/auth/signup/)
     * Request(POST)
         * Json : username, password  
-    * Response : true/false 
+    * Response : Success/ Fail
 
 * signin(/auth/signin/)
     * Request(POST)
@@ -36,13 +36,13 @@
         * Auth : jwt
         * PathParameter: pk
         * Json : Password  
-    * Response : true/false
+    * Response : Success/ Fail
 
 * withdraw(/user/&#60;pk&#62;/)
     * Request(DELETE)
         * Auth: jwt
         * PathParameter: pk
-    * Response : true/false
+    * Response : Success/ Fail
 
 ### Calender
 
@@ -55,17 +55,17 @@
     * Request(POST)
         * Auth: jwt
         * Json: title, start_day(yyyy-mm-dd), cycleWith, cycleUnit  
-    * Response : true/false
+    * Response : Success/ Fail
 
 * updateCalender(/calender/&#60;pk&#62;/)
     * Request(PUT)
         * Auth: jwt
         * PathParameter: pk 
         * Json: title, start_day(yyyy-mm-dd), cycleWith, cycleUnit
-    * Response : true/false
+    * Response : Success/ Fail
 
 * delCalender(/calender/&#60;pk&#62;/)
     * Request(DELETE)
         * Auth: jwt
         * PathParameter: pk
-    * Response : true/false
+    * Response : Success/ Fail
