@@ -19,8 +19,8 @@
 
 ## API Docs
 
-* Success Response: 
-* Fail Response: 
+* Success Response: {"Message": "Success"}
+* Fail Response: {"Message": "Failed"}
 
 * Userinfo
    * Long:user_id
