@@ -1,71 +1,102 @@
 # MemorialDay-Calendar
-매 년 돌아오는 기념일 리마인더
 
 ## 기능
 
-* 기념일의 월/일을 저장 후 매년 돌아오는 기념일 표시
-
-* Android 어플을 이용해 매년 돌아오는 기념일 리마인드
+* 기념일의 월/일을 저장 후 돌아오는 기념일 표시
+* Save the month/day of the anniversary and mark the return anniversary
 
 * n일에 한번 돌아오는 기념일
+* a return day on the (n)
 
 * n주에 한번 돌아오는 기념일
+* a return week on the (n)
 
 * n달에 한번 돌아오는 기념일
+* a return month on the (n)
 
 * n년에 한번 돌아오는 기념일
+* a return year on the (n)
 
 ## API Docs
+
+* Success Response: 
+* Fail Response: 
+
+* Userinfo
+   * Long:user_id
+   * String:username
+   * String:jwt
+
+* SetAnniversary
+   * String:title
+   * Date:start_day(yyyy-mm-dd)
+   * String:cycleWith
+   * int:cycleUnit  
+
+* GetAnniversary
+   * int:anniversary_id
+   * String:title
+   * Date:start_day(yyyy-mm-dd)
+   * String:cycleWith
+   * int:cycleUnit 
 
 ### Auth
 
 * signup(/auth/signup/)
     * Request(POST)
-        * Json : username, password  
+        * Json
+            * String:username
+            * String:password  
     * Response : Success/ Fail
 
 * signin(/auth/signin/)
     * Request(POST)
         * Json : username, password  
-    * Response : userinfo(pk, username, jwt)
+    * Response : Userinfo
 
 ### User
 
-* password modify(/user/&#60;pk&#62;/)
+* password modify(/user/&#60;user_id&#62;/)
     * Request(PATCH)
         * Auth : jwt
-        * PathParameter: pk
-        * Json : Password  
+        * PathParameter: Long:user_id
+        * Json : String:password
     * Response : Success/ Fail
 
-* withdraw(/user/&#60;pk&#62;/)
+* withdraw(/user/&#60;user_id&#62;/)
     * Request(DELETE)
         * Auth: jwt
-        * PathParameter: pk
+        * PathParameter: Long:user_id
     * Response : Success/ Fail
 
 ### Calender
 
-* showCalender(/calender/)
+* showCalender(/user/&#60;user_id&#62;/calender/)
     * Request(GET)
         * Auth: jwt
-    * Response : calender_data(pk, title, start_day(yyyy-mm-dd), cycle_with, cycle_unit)
+        * PathParameter: Long:user_id
+    * Response : GetAnniversary
 
-* setCalender(/calender/)
+* setCalender(/user/&#60;user_id&#62;/calender/)
     * Request(POST)
         * Auth: jwt
-        * Json: title, start_day(yyyy-mm-dd), cycleWith, cycleUnit  
+        * PathParameter: Long:user_id
+        * Json : SetAnniversary
     * Response : Success/ Fail
 
-* updateCalender(/calender/&#60;pk&#62;/)
+* updateCalender(/user/&#60;user_id&#62;/calender/&#60;anniversary_id&#62;/)
     * Request(PUT)
         * Auth: jwt
-        * PathParameter: pk 
-        * Json: title, start_day(yyyy-mm-dd), cycleWith, cycleUnit
+        * PathParameter: 
+            * Long:user_id
+            * Long:anniversary_id 
+        * Json: SetAnniversary
     * Response : Success/ Fail
 
-* delCalender(/calender/&#60;pk&#62;/)
+* delCalender(/user/&#60;user_id&#62;/calender/&#60;anniversary_id&#62;/)
     * Request(DELETE)
         * Auth: jwt
-        * PathParameter: pk
+        * PathParameter: 
+            * Long:user_id
+            * Long:anniversary_id 
     * Response : Success/ Fail
